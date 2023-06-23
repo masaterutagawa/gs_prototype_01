@@ -1,3 +1,31 @@
+<?php
+
+// 関数ファイル読み込み
+include('function.php');
+
+// DB接続用関数を実行
+$pdo = db_connect();
+
+// SQL作成&実行
+$sql = "SELECT card_filename FROM dev13_card";
+$stmt = $pdo->prepare($sql);
+
+try {
+    $status = $stmt->execute();
+} catch (PDOException $e) {
+    echo json_encode(["sql error" => "{$e->getMessage()}"]);
+    exit();
+}
+// SQL実行の処理
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$output = [];
+foreach ($result as $record)
+    $output[] = $record["card_filename"];
+
+// 配列の中からランダムに1つ選ぶ
+$randomCardName = $output[array_rand($output)];
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -9,6 +37,7 @@
 </head>
 
 <body>
+
     <div class="bg-white py-6 sm:py-8 lg:py-12">
         <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
             <h2 class="mb-2 text-center text-2xl font-bold text-gray-800 md:mb-2 lg:text-3xl">2023年0月0日</h2>
@@ -40,7 +69,8 @@
 
                     <h3 class="mb-4 text-center text-lg font-bold text-gray-800 md:mb-8 lg:text-2xl">今日の1枚</h3>
                     <div class="h-64 overflow-hidden rounded-lg bg-gray-100 shadow-lg md:h-auto">
-                        <img src="https://images.unsplash.com/photo-1610465299996-30f240ac2b1c?auto=format&q=75&fit=crop&w=600&h=750" loading="lazy" alt="Photo by Martin Sanchez" class="h-full w-full object-cover object-center" />
+                        <img src="card_images/<?= $randomCardName ?>" loading="lazy" alt="Photo by Martin Sanchez" class="h-full w-full object-cover object-center" />
+                        <input name="select_card_filename" type="hidden" value="<?= $randomCardName ?>" />
                     </div>
                     <div>
                         <label for="photo_keyword" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">この写真から、頭の中に浮かぶ言葉は何？</label>

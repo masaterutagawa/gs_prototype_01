@@ -2,6 +2,7 @@
 session_start();
 $user_code = $_POST['user_code'];
 $user_pass = $_POST['user_pass'];
+print_r(session_id());
 
 // 関数ファイル読み込み
 include('function.php');
@@ -34,7 +35,7 @@ if ($val["user_id"] != "") {
     $_SESSION['chk_ssid'] = session_id();
     $_SESSION['user_name'] = $val["user_name"];
     // login処理OKの場合ほにゃらら.phpへ遷移
-    header('Location: edit.php');
+    header('Location: admin-index.php');
 } else {
     // login処理NGの場合login.phpへ遷移
     header('Location: login.php');

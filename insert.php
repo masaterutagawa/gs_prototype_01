@@ -6,6 +6,7 @@ if (
     !isset($_POST['events_emotions']) || $_POST['events_emotions'] == '' ||
     !isset($_POST['events_points']) || $_POST['events_points'] == '' ||
     !isset($_POST['events_points_reason']) || $_POST['events_points_reason'] == '' ||
+    !isset($_POST['select_card_filename']) || $_POST['select_card_filename'] == '' ||
     !isset($_POST['photo_keyword']) || $_POST['photo_keyword'] == '' ||
     !isset($_POST['photo_keyword_reason']) || $_POST['photo_keyword_reason'] == '' ||
     !isset($_POST['photo_emotions']) || $_POST['photo_emotions'] == '' ||
@@ -21,6 +22,7 @@ $events_impression = $_POST['events_impression'];
 $events_emotions = $_POST['events_emotions'];
 $events_points = $_POST['events_points'];
 $events_points_reason = $_POST['events_points_reason'];
+$select_card_filename = $_POST['select_card_filename'];
 $photo_keyword = $_POST['photo_keyword'];
 $photo_keyword_reason = $_POST['photo_keyword_reason'];
 $photo_emotions = $_POST['photo_emotions'];
@@ -34,7 +36,7 @@ $pdo = db_connect();
 
 
 // データ登録ＳＱＬ作成
-$sql = "INSERT INTO dev13_diary(diary_id,registration_date,created_date,update_date,today_events,events_impression,events_emotions,events_points,events_points_reason,photo_keyword,photo_keyword_reason,photo_emotions,photo_points,photo_points_reason)VALUES(NULL, now(),now(),now(),:today_events, :events_impression, :events_emotions,:events_points, :events_points_reason, :photo_keyword, :photo_keyword_reason, :photo_emotions, :photo_points, :photo_points_reason)";
+$sql = "INSERT INTO dev13_diary(diary_id,registration_date,created_date,update_date,today_events,events_impression,events_emotions,events_points,events_points_reason,select_card_filename,photo_keyword,photo_keyword_reason,photo_emotions,photo_points,photo_points_reason)VALUES(NULL, now(),now(),now(),:today_events, :events_impression, :events_emotions,:events_points, :events_points_reason,:select_card_filename, :photo_keyword, :photo_keyword_reason, :photo_emotions, :photo_points, :photo_points_reason)";
 $stmt = $pdo->prepare($sql);
 
 // 変数をバインド
@@ -43,6 +45,7 @@ $stmt->bindValue(':events_impression', $events_impression, PDO::PARAM_STR); // I
 $stmt->bindValue(':events_emotions', $events_emotions, PDO::PARAM_STR); // Integer（数値の場合は PDO::PARAM_INT）
 $stmt->bindValue(':events_points', $events_points, PDO::PARAM_INT); // Integer（数値の場合は PDO::PARAM_INT）
 $stmt->bindValue(':events_points_reason', $events_points_reason, PDO::PARAM_STR); // Integer（数値の場合は PDO::PARAM_INT）
+$stmt->bindValue(':select_card_filename', $select_card_filename, PDO::PARAM_STR); // Integer（数値の場合は PDO::PARAM_INT）
 $stmt->bindValue(':photo_keyword', $photo_keyword, PDO::PARAM_STR); // Integer（数値の場合は PDO::PARAM_INT）
 $stmt->bindValue(':photo_keyword_reason', $photo_keyword_reason, PDO::PARAM_STR); // Integer（数値の場合は PDO::PARAM_INT）
 $stmt->bindValue(':photo_emotions', $photo_emotions, PDO::PARAM_STR); // Integer（数値の場合は PDO::PARAM_INT）
@@ -57,6 +60,6 @@ if ($status == false) {
     exit("QueryError:" . $error[2]);
 } else {
     // 登録ページへ移動
-    header('Location: diary-entry.php');
+    header('Location: admin-index.php');
     exit;
 }

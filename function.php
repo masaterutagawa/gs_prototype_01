@@ -19,6 +19,8 @@ function loginCheck()
     }
 }
 
+
+
 // DB接続用関数
 function db_connect()
 {
